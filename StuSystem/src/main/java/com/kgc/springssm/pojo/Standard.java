@@ -13,9 +13,9 @@ public class Standard {
 
     private String keyss;
 
-    private Date releaseDate;
+    private String releaseDate;
 
-    private Date implDate;
+    private String implDate;
 
     private String packagePath;
 
@@ -59,19 +59,19 @@ public class Standard {
         this.keyss = keyss == null ? null : keyss.trim();
     }
 
-    public Date getReleaseDate() {
+    public String getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(Date releaseDate) {
+    public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
 
-    public Date getImplDate() {
+    public String getImplDate() {
         return implDate;
     }
 
-    public void setImplDate(Date implDate) {
+    public void setImplDate(String implDate) {
         this.implDate = implDate;
     }
 
