@@ -43,6 +43,7 @@
                 <td>${list.versionn}</td>
                 <td>${list.releaseDate}</td>
                 <td>${list.implDate}</td>
+                <td><a href="/down?filename=${list.packagePath}">下载</a>&nbsp;&nbsp;<a href="">修改</a></td>
             </tr>
         </c:forEach>
     </table>

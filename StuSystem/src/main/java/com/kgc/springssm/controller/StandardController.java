@@ -15,8 +15,11 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.security.auth.login.CredentialException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 /**
@@ -49,6 +52,21 @@ public class StandardController {
             PageInfo pageInfo=new PageInfo(standards);
             model.addAttribute("pageInfo",pageInfo);
             return "index";
+        }
+    }
+    @RequestMapping("/down")
+    public void down(String filename, HttpServletRequest request, HttpServletResponse response){
+        String realPath = request.getServletContext().getRealPath("/static/uploadfiles/");
+        File file=new File(realPath,filename);
+        //设置响应类型  ==》 告诉浏览器当前是下载操作，我要下载东西
+        response.setContentType("application/x-msdownload");
+        //设置下载时文件的显示类型(即文件名称-后缀)   ex：txt为文本类型
+        response.setHeader("Content-Disposition", "attachment;filename=" + filename);
+        //下载文件：将一个路径下的文件数据转到一个输出流中，也就是把服务器文件通过流写(复制)到浏览器端
+        try {
+            Files.copy(file.toPath(), response.getOutputStream());//Files.copy(要下载的文件的路径,响应的输出流)
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
     @RequestMapping("/toadd")
