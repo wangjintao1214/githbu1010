@@ -14,38 +14,39 @@
 </head>
 <script type="text/javascript" src="/static/js/jquery-1.12.4.js"></script>
 <body>
-<form action="/doadd" method="post" enctype="multipart/form-data">
+<form action="/doupd" method="post" enctype="multipart/form-data">
     <table border="1px" align="center" width="500px">
         <tr>
             <td colspan="8" align="center"><h2>修改标准信息</h2></td>
         </tr>
         <tr>
             <td><span style="color: red">*</span>标准号：</td>
-            <td><input type="text" name="stdNum"></td>
+            <td><input type="text" name="stdNum" value="${ standard.stdNum}"></td>
         </tr>
         <tr>
             <td><span style="color: red">*</span>中文名称：</td>
-            <td><input type="text" name="zhname"></td>
+            <td><input type="text" name="zhname" value="${ standard.zhname}"></td>
+            <<input type="hidden" name="id" value="${standard.id}">
         </tr>
         <tr>
             <td><span style="color: red">*</span>版本：</td>
-            <td><input type="text" name="versionn"></td>
+            <td><input type="text" name="versionn" value="${ standard.versionn}"></td>
         </tr>
         <tr>
             <td><span style="color: red">*</span>关键字/词：</td>
-            <td><input type="text" name="keyss"></td>
+            <td><input type="text" name="keyss" value="${ standard.keyss}"></td>
         </tr>
         <tr>
             <td>发布日期(yyyy-MM-dd)：</td>
-            <td><input type="text" name="releaseDate"></td>
+            <td><input type="text" name="releaseDate" value="${ standard.releaseDate}"></td>
         </tr>
         <tr>
             <td>实施日期(yyyy-MM-dd)：</td>
-            <td><input type="text" name="implDate"></td>
+            <td><input type="text" name="implDate" value="${ standard.implDate}"></td>
         </tr>
         <tr>
             <td><span style="color: red">*</span>附件：</td>
-            <td><input type="file" name="packagePath"></td>
+            <td><input type="file" name="packagePath1" value="${ standard.packagePath}"></td>
         </tr>
         <tr>
             <td colspan="8" align="center">

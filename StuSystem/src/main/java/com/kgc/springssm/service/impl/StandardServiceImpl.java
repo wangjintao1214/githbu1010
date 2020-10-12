@@ -28,4 +28,14 @@ public class StandardServiceImpl implements StandardService{
         int i = standardMapper.insertSelective(standard);
         return i;
     }
+
+    @Override
+    public Standard selectById(int id) {
+        return standardMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public void upd(Standard standard) {
+        standardMapper.updateByPrimaryKeySelective(standard);
+    }
 }

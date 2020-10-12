@@ -74,19 +74,19 @@ public class StandardController {
         return "add";
     }
     @RequestMapping("/doadd")
-    public String doadd(Standard standard, HttpSession session, MultipartFile packagePath){
+    public String doadd(Standard standard, HttpSession session, MultipartFile packagePath1){
         //文件上传
         String realPath = session.getServletContext().getRealPath("/static/uploadfiles/");
-        String originalFilename = packagePath.getOriginalFilename();
+        String originalFilename = packagePath1.getOriginalFilename();
         String extension = FilenameUtils.getExtension(originalFilename);
         String newFileName=System.currentTimeMillis()+"_"+ RandomUtils.nextInt(1000000)+"_."+extension;
         File file=new File(realPath,newFileName);
         try {
-            packagePath.transferTo(file);
+            packagePath1.transferTo(file);
         }catch (Exception ex){
             ex.printStackTrace();
         }
-        standard.setPackagePath(realPath+newFileName);
+        standard.setPackagePath(newFileName);
         int i = standardService.add(standard);
         if(i>0){
             session.setAttribute("msg","添加成功！！！");
@@ -95,6 +95,31 @@ public class StandardController {
             session.setAttribute("msg","添加失败！！！");
             return "redirect:/toadd";
         }
-
+    }
+    @RequestMapping("/chaupd")
+    public  String chaupd(int id, Model model){
+        Standard standard=standardService.selectById(id);
+        model.addAttribute("standard",standard);
+        return "upd";
+    }
+    @RequestMapping("/doupd")
+    public String doupd(Standard standard, HttpSession session, MultipartFile packagePath1){
+        //文件上传
+        String realPath = session.getServletContext().getRealPath("/static/uploadfiles/");
+        String originalFilename = packagePath1.getOriginalFilename();
+        String extension = FilenameUtils.getExtension(originalFilename);
+        String newFileName=System.currentTimeMillis()+"_"+ RandomUtils.nextInt(1000000)+"_."+extension;
+        File file=new File(realPath,newFileName);
+        try {
+            packagePath1.transferTo(file);
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        standard.setPackagePath(newFileName);
+     /*   standard.setDevid(devUserSession.getId());
+        standard.setCreatedby(devUserSession.getId());
+        standard.setCreationdate(new Date());*/
+        standardService.upd(standard);
+        return "redirect:/";
     }
 }

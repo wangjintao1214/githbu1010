@@ -12,5 +12,9 @@ import java.util.List;
 public interface StandardService {
     List<Standard> selectByExample(StandardExample example);
     int add(Standard standard);
+
+    Standard selectById(int id);
+
+    void upd(Standard standard);
 }
 

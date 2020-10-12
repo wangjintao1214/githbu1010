@@ -45,7 +45,7 @@
         </tr>
         <tr>
             <td><span style="color: red">*</span>附件：</td>
-            <td><input type="file" name="packagePath"></td>
+            <td><input type="file" name="packagePath1"></td>
         </tr>
         <tr>
             <td colspan="8" align="center">
