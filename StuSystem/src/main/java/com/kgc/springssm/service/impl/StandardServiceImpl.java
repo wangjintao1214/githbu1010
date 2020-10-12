@@ -38,4 +38,10 @@ public class StandardServiceImpl implements StandardService{
     public void upd(Standard standard) {
         standardMapper.updateByPrimaryKeySelective(standard);
     }
+
+    @Override
+    public int del(int id) {
+        int i = standardMapper.deleteByPrimaryKey(id);
+        return i;
+    }
 }

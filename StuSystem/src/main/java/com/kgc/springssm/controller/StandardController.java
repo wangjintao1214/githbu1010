@@ -9,6 +9,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,34 +31,36 @@ import java.util.List;
 public class StandardController {
     @Resource
     StandardService standardService;
+
     @RequestMapping("/")
-    public String toindex(Model model, String pageIndex,String title){
-        int pageNum=1;
-        if(pageIndex!=null){
-            pageNum=Integer.parseInt(pageIndex);
+    public String toindex(Model model, String pageIndex, String title) {
+        int pageNum = 1;
+        if (pageIndex != null) {
+            pageNum = Integer.parseInt(pageIndex);
         }
-        int pageSize=3;
-        PageHelper.startPage(pageNum,pageSize);
-        if(title != null && title.isEmpty() == false){
-            StandardExample example=new StandardExample();
+        int pageSize = 3;
+        PageHelper.startPage(pageNum, pageSize);
+        if (title != null && title.isEmpty() == false) {
+            StandardExample example = new StandardExample();
             StandardExample.Criteria criteria = example.createCriteria();
-            criteria.andZhnameLike("%"+title+"%");
+            criteria.andZhnameLike("%" + title + "%");
             List<Standard> standards = standardService.selectByExample(example);
-            PageInfo pageInfo=new PageInfo(standards);
-            model.addAttribute("pageInfo",pageInfo);
+            PageInfo pageInfo = new PageInfo(standards);
+            model.addAttribute("pageInfo", pageInfo);
             return "index";
-        }else{
-            PageHelper.startPage(pageNum,pageSize);
+        } else {
+            PageHelper.startPage(pageNum, pageSize);
             List<Standard> standards = standardService.selectByExample(null);
-            PageInfo pageInfo=new PageInfo(standards);
-            model.addAttribute("pageInfo",pageInfo);
+            PageInfo pageInfo = new PageInfo(standards);
+            model.addAttribute("pageInfo", pageInfo);
             return "index";
         }
     }
+
     @RequestMapping("/down")
-    public void down(String filename, HttpServletRequest request, HttpServletResponse response){
+    public void down(String filename, HttpServletRequest request, HttpServletResponse response) {
         String realPath = request.getServletContext().getRealPath("/static/uploadfiles/");
-        File file=new File(realPath,filename);
+        File file = new File(realPath, filename);
         //设置响应类型  ==》 告诉浏览器当前是下载操作，我要下载东西
         response.setContentType("application/x-msdownload");
         //设置下载时文件的显示类型(即文件名称-后缀)   ex：txt为文本类型
@@ -69,50 +72,54 @@ public class StandardController {
             e.printStackTrace();
         }
     }
+
     @RequestMapping("/toadd")
-    public  String toadd(){
+    public String toadd() {
         return "add";
     }
+
     @RequestMapping("/doadd")
-    public String doadd(Standard standard, HttpSession session, MultipartFile packagePath1){
+    public String doadd(Standard standard, HttpSession session, MultipartFile packagePath1) {
         //文件上传
         String realPath = session.getServletContext().getRealPath("/static/uploadfiles/");
         String originalFilename = packagePath1.getOriginalFilename();
         String extension = FilenameUtils.getExtension(originalFilename);
-        String newFileName=System.currentTimeMillis()+"_"+ RandomUtils.nextInt(1000000)+"_."+extension;
-        File file=new File(realPath,newFileName);
+        String newFileName = System.currentTimeMillis() + "_" + RandomUtils.nextInt(1000000) + "_." + extension;
+        File file = new File(realPath, newFileName);
         try {
             packagePath1.transferTo(file);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         standard.setPackagePath(newFileName);
         int i = standardService.add(standard);
-        if(i>0){
-            session.setAttribute("msg","添加成功！！！");
+        if (i > 0) {
+            session.setAttribute("msg", "添加成功！！！");
             return "redirect:/";
-        }else {
-            session.setAttribute("msg","添加失败！！！");
+        } else {
+            session.setAttribute("msg", "添加失败！！！");
             return "redirect:/toadd";
         }
     }
+
     @RequestMapping("/chaupd")
-    public  String chaupd(int id, Model model){
-        Standard standard=standardService.selectById(id);
-        model.addAttribute("standard",standard);
+    public String chaupd(int id, Model model) {
+        Standard standard = standardService.selectById(id);
+        model.addAttribute("standard", standard);
         return "upd";
     }
+
     @RequestMapping("/doupd")
-    public String doupd(Standard standard, HttpSession session, MultipartFile packagePath1){
+    public String doupd(Standard standard, HttpSession session, MultipartFile packagePath1) {
         //文件上传
         String realPath = session.getServletContext().getRealPath("/static/uploadfiles/");
         String originalFilename = packagePath1.getOriginalFilename();
         String extension = FilenameUtils.getExtension(originalFilename);
-        String newFileName=System.currentTimeMillis()+"_"+ RandomUtils.nextInt(1000000)+"_."+extension;
-        File file=new File(realPath,newFileName);
+        String newFileName = System.currentTimeMillis() + "_" + RandomUtils.nextInt(1000000) + "_." + extension;
+        File file = new File(realPath, newFileName);
         try {
             packagePath1.transferTo(file);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         standard.setPackagePath(newFileName);
@@ -120,6 +127,20 @@ public class StandardController {
         standard.setCreatedby(devUserSession.getId());
         standard.setCreationdate(new Date());*/
         standardService.upd(standard);
+        return "redirect:/";
+    }
+
+    @RequestMapping("/dodel/{id}")
+    public String dodel(@PathVariable("id") String id, HttpSession session) {
+        String []arr=id.split(",");
+        for (int i = 0; i < arr.length; i++) {
+            int del = standardService.del(Integer.parseInt(arr[i]));
+            if (del > 0) {
+                session.setAttribute("success", "删除成功");
+            } else {
+                session.setAttribute("", "删除失败");
+            }
+        }
         return "redirect:/";
     }
 }
