@@ -16,5 +16,6 @@ public interface StandardService {
     Standard selectById(int id);
 
     void upd(Standard standard);
+    int del(int id);
 }
 

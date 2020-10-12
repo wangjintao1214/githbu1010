@@ -37,7 +37,7 @@
         </tr>
         <c:forEach items="${pageInfo.list}" var="list">
             <tr align="center">
-                <td><input type="checkbox" class="kuang"></td>
+                <td><input type="checkbox" class="kuang" name="check" value="${list.id}"></td>
                 <input type="hidden" value="${list.id}">
                 <td>${list.stdNum}</td>
                 <td>${list.zhname}</td>
@@ -62,6 +62,25 @@
         </c:if>
         <a href="/?pageIndex=${pageInfo.lastPage}">尾页</a>
     </div>
+    <p>${success}</p>
 </center>
+<script>
+    function del() {
+        var check = $("[name=check]:checked");
+        var flag = confirm("确认是否删除");
+        if (flag) {
+            if (check != undefined) {
+                check.each(function () {
+                    var id="";
+                    id+=$(this).val()+",";
+                    location.href="/dodel/"+id;
+                })
+            } else {
+                alert("请选择删除项");
+
+            }
+        }
+    }
+</script>
 </body>
 </html>
